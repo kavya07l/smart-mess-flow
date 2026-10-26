@@ -42,27 +42,18 @@ sample app. Do not reuse these passwords or enter real student information.
 
 ## Deploy on Render
 
-1. Sign in at <https://render.com> using the GitHub account that owns
-   `kavya07l/smart-mess-flow`.
-2. Choose **New +** → **Web Service**, connect GitHub, and select the
-   `smart-mess-flow` repository.
-3. Use these service settings:
+1. Open the [Render Blueprint for this repository](https://render.com/deploy?repo=https://github.com/kavya07l/smart-mess-flow)
+   and sign in to Render.
+2. Review the service named `smart-mess-flow` and click **Apply**. Render reads
+   the deployment settings from `render.yaml`, including the build and start
+   commands, health check, and a generated private `SECRET_KEY`.
+3. Wait for the first deploy to finish. Open the `onrender.com` URL shown in
+   the Render dashboard and share that URL with your teacher.
 
-   | Setting | Value |
-   | --- | --- |
-   | Runtime | Python |
-   | Build command | `pip install -r requirements.txt` |
-   | Start command | `gunicorn --bind 0.0.0.0:$PORT app:app` |
-
-4. Add an environment variable named `SECRET_KEY` with a long random value.
-   Keep the value private. You can generate one locally in PowerShell with:
-
-   ```powershell
-   py -c "import secrets; print(secrets.token_hex(32))"
-   ```
-
-5. Create the service and wait for the deploy to finish. Open the `onrender.com`
-   URL shown in the Render dashboard and share that URL with your teacher.
+If you prefer to configure the service manually, use build command
+`pip install -r requirements.txt`, start command
+`gunicorn --bind 0.0.0.0:$PORT app:app`, health check path `/login`, and set a
+private `SECRET_KEY` environment variable.
 
 This demo stores its database in a local SQLite file. On Render's free web
 service, that file is temporary and may be reset after a restart or redeploy;
