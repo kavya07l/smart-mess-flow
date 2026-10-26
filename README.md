@@ -40,6 +40,36 @@ process real money.
 The demo credentials above are public by design so reviewers can explore the
 sample app. Do not reuse these passwords or enter real student information.
 
+## Deploy on Render
+
+1. Sign in at <https://render.com> using the GitHub account that owns
+   `kavya07l/smart-mess-flow`.
+2. Choose **New +** → **Web Service**, connect GitHub, and select the
+   `smart-mess-flow` repository.
+3. Use these service settings:
+
+   | Setting | Value |
+   | --- | --- |
+   | Runtime | Python |
+   | Build command | `pip install -r requirements.txt` |
+   | Start command | `gunicorn --bind 0.0.0.0:$PORT app:app` |
+
+4. Add an environment variable named `SECRET_KEY` with a long random value.
+   Keep the value private. You can generate one locally in PowerShell with:
+
+   ```powershell
+   py -c "import secrets; print(secrets.token_hex(32))"
+   ```
+
+5. Create the service and wait for the deploy to finish. Open the `onrender.com`
+   URL shown in the Render dashboard and share that URL with your teacher.
+
+This demo stores its database in a local SQLite file. On Render's free web
+service, that file is temporary and may be reset after a restart or redeploy;
+the demo accounts and sample slots will be seeded again. Use a persistent
+database for anything beyond a short presentation demo. The simulated payment
+is not a real payment service.
+
 ## How it works
 
 - Students choose a meal and requested slot. When that slot is full, the app
