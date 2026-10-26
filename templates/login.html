@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Sign in · Smart Mess Flow{% endblock %}
+{% block content %}
+<section class="auth-layout">
+  <div class="auth-intro">
+    <span class="eyebrow">A better mess experience</span>
+    <h1>Less waiting.<br><span>More flow.</span></h1>
+    <p>Book a meal slot, arrive at the right time, and keep the buffet moving.</p>
+    <div class="flow-line compact"><span>Entry</span><i></i><span>Food</span><i></i><span>Seating</span><i></i><span>Exit</span></div>
+  </div>
+  <form class="card auth-card" method="post">
+    <h2>Welcome back</h2><p class="muted">Sign in with your student or staff ID.</p>
+    <label for="user_id">ID</label><input id="user_id" name="user_id" autocomplete="username" required>
+    <label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" required>
+    <button class="button primary full" type="submit">Sign in</button>
+    <p class="form-foot">New student? <a href="{{ url_for('register') }}">Create an account</a></p>
+    <details class="demo-details"><summary>Demo account details</summary><p>Hostel: hostel01 / hostel123<br>Day scholar: day01 / day123<br>Staff: staff01 / staff123<br>Admin: admin01 / admin123</p></details>
+  </form>
+</section>
+{% endblock %}

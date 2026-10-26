@@ -1,0 +1,21 @@
+# Python bytecode and local environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local database files can contain demo or personal data
+*.db
+*.sqlite
+*.sqlite3
+
+# Local secrets and environment configuration
+.env
+.env.*
+!.env.example
+
+# Editor and operating system files
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Staff scanner · Smart Mess Flow{% endblock %}
+{% block content %}
+<section class="narrow-page scanner-page">
+  <div class="page-heading"><span class="eyebrow">Mess staff</span><h1>Booking scanner</h1><p>Read the booking ID below the student's QR pass and record their movement.</p></div>
+  <form class="card scanner-card" method="post">
+    <div class="scanner-illustration" aria-hidden="true"><span>▦</span><small>QR PASS</small></div>
+    <label for="booking_id">Booking ID</label><input id="booking_id" name="booking_id" type="number" min="1" placeholder="e.g. 12" required autofocus>
+    <div class="button-row"><button class="button primary" name="action" value="entry" type="submit">✓ Record Entry</button><button class="button secondary" name="action" value="exit" type="submit">↗ Record Exit</button></div>
+    <p class="micro-copy">Entry is accepted only during the slot time. Exit updates the assigned counter queue.</p>
+  </form>
+</section>
+{% endblock %}

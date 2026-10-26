@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}QR pass #{{ booking['booking_id'] }} · Smart Mess Flow{% endblock %}
+{% block content %}
+<section class="narrow-page pass-page">
+  <div class="page-heading centered"><span class="eyebrow">Booking confirmed</span><h1>Your mess pass</h1><p>Show this QR code to mess staff during your slot.</p></div>
+  <article class="card pass-card">
+    <img class="qr-image" src="data:image/png;base64,{{ qr_data }}" alt="QR code for booking {{ booking['booking_id'] }}">
+    <span class="state-pill {{ booking['status'] }}">{{ booking['status'] }}</span>
+    <h2>{{ booking['meal']|title }}</h2><p class="pass-time">{{ booking['start_time'] }} – {{ booking['end_time'] }}</p>
+    <div class="pass-id">BOOKING ID <strong>#{{ booking['booking_id'] }}</strong></div>
+    <p class="micro-copy">The QR code contains only the booking ID. Entry is valid during the displayed slot.</p>
+  </article>
+</section>
+{% endblock %}

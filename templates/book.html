@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Book a slot · Smart Mess Flow{% endblock %}
+{% block content %}
+<section class="page-heading"><span class="eyebrow">Your meal, your time</span><h1>Book a meal slot</h1><p>Choose a meal and the earliest slot that fits your schedule.</p></section>
+{% if student['type'] == 'day' and not student['paid'] %}
+<div class="notice notice-warn"><strong>Payment required</strong><span>Day scholars need to complete the demo payment before booking.</span><a href="{{ url_for('payment') }}">Go to payment →</a></div>
+{% endif %}
+<form class="card booking-form" method="post" id="booking-form">
+  <div class="form-grid">
+    <div><label for="meal">Meal</label><select name="meal" id="meal" required><option value="">Select a meal</option><option value="breakfast">Breakfast</option><option value="lunch">Lunch</option><option value="dinner">Dinner</option></select></div>
+    <div><label for="slot_id">Requested time slot</label><select name="slot_id" id="slot_id" required><option value="">Select a meal first</option></select></div>
+  </div>
+  <div id="slot-hint" class="helper-text">If your chosen slot fills up, we will try the next later slot for that meal.</div>
+  <button class="button primary" type="submit" {% if student['type'] == 'day' and not student['paid'] %}disabled{% endif %}>Confirm booking <span aria-hidden="true">→</span></button>
+</form>
+<div id="available-slots" class="slot-grid booking-slot-grid">
+{% for slot in slots %}<article class="card slot-card available-slot" data-meal="{{ slot['meal'] }}" data-slot-id="{{ slot['slot_id'] }}" data-seats="{{ slot['seats_left'] }}">
+  <div class="slot-card-top"><span class="meal-tag {{ slot['meal'] }}">{{ slot['meal'] }}</span><span class="seats-value">{{ slot['seats_left'] }} seats left</span></div>
+  <h3>{{ slot['start_time'] }} – {{ slot['end_time'] }}</h3><p class="muted">{{ slot['booked'] }} of {{ slot['capacity'] }} reserved</p>
+</article>{% endfor %}
+</div>
+{% endblock %}

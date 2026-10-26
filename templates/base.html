@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Smart Mess Flow{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="{{ url_for('home') }}"><span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>Smart Mess Flow<small>THE CAMPUS TABLE</small></span></a>
+    {% if session.get('user_id') %}
+    <nav class="nav-links">
+      {% if session.get('role') == 'student' %}
+      <a class="{{ 'active' if request.endpoint == 'dashboard' else '' }}" href="{{ url_for('dashboard') }}">Dashboard</a><a class="{{ 'active' if request.endpoint == 'book' else '' }}" href="{{ url_for('book') }}">Book a slot</a><a class="{{ 'active' if request.endpoint == 'payment' else '' }}" href="{{ url_for('payment') }}">Payment</a>
+      {% else %}
+      <a class="{{ 'active' if request.endpoint == 'scanner' else '' }}" href="{{ url_for('scanner') }}">Staff scanner</a>
+      {% if session.get('role') == 'admin' %}<a class="{{ 'active' if request.endpoint == 'admin' else '' }}" href="{{ url_for('admin') }}">Admin panel</a>{% endif %}
+      {% endif %}
+      <span class="user-chip">{{ session.get('name') }}</span><a class="nav-logout" href="{{ url_for('logout') }}">Sign out <span aria-hidden="true">↗</span></a>
+    </nav>
+    {% endif %}
+  </header>
+  <main class="page-shell">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}<div class="flash-stack">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="site-footer">A smoother meal, one step at a time.</footer>
+</body>
+</html>

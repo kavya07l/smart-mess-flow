@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · Smart Mess Flow{% endblock %}
+{% block content %}
+<section class="page-heading dashboard-heading">
+  <div class="dashboard-orbit orbit-one" aria-hidden="true"></div><div class="dashboard-orbit orbit-two" aria-hidden="true"></div>
+  <div><span class="eyebrow">Live mess overview</span><h1>Good day, {{ session.get('name')|e }}.</h1><p>Plan your visit and follow the one-way path through the mess.</p></div>
+  <a class="button primary" href="{{ url_for('book') }}"><span class="button-icon" aria-hidden="true">＋</span> Book a meal slot <span aria-hidden="true">→</span></a>
+</section>
+<section class="stat-grid" id="dashboard-stats" data-dashboard-url="{{ url_for('dashboard_data') }}">
+  <article class="stat-card"><span class="stat-icon">◉</span><div><p class="muted">Inside right now</p><strong id="inside-count">{{ inside_count }}</strong><span>students in mess</span></div></article>
+  <article class="stat-card"><span class="stat-icon">◷</span><div><p class="muted">Estimated wait</p><strong><span id="waiting-time">{{ waiting_minutes }}</span><small> min</small></strong><span>based on counter queues</span></div></article>
+  <article class="stat-card"><span class="stat-icon">✓</span><div><p class="muted">Account</p><strong class="status-text">{{ 'Paid' if student['paid'] else ('Hostel' if student['type'] == 'hostel' else 'Payment due') }}</strong><span>{{ 'Meal access active' if student['type'] == 'hostel' or student['paid'] else 'Pay before booking a slot' }}</span></div></article>
+</section>
+<section class="section-block flow-section">
+  <div class="section-title"><div><span class="eyebrow">Designed for a clear route</span><h2>One-way mess flow</h2></div></div>
+  <div class="flow-line"><span>Entry</span><i></i><span>Plates</span><i></i><span>Food Counters</span><i></i><span>Seating</span><i></i><span>Water &amp; Handwash</span><i></i><span>Exit</span></div>
+</section>
+<section class="section-block">
+  <div class="section-title"><div><span class="eyebrow">Capacity at a glance</span><h2>Slot occupancy</h2></div><span class="live-label"><i></i> Refreshes every 10 seconds</span></div>
+  <div class="slot-grid" id="slot-grid">
+  {% for slot in slots %}
+    {% set percent = (slot['booked'] * 100 / slot['capacity'])|round|int %}
+    <article class="card slot-card" data-slot-id="{{ slot['slot_id'] }}">
+      <div class="slot-card-top"><span class="meal-tag {{ slot['meal'] }}">{{ slot['meal'] }}</span><span class="seats-value">{{ slot['seats_left'] }} seats left</span></div>
+      <h3>{{ slot['start_time'] }} – {{ slot['end_time'] }}</h3>
+      <div class="progress-track"><span class="progress-fill" style="width: {{ percent }}%"></span></div>
+      <div class="progress-caption"><span><b class="booked-count">{{ slot['booked'] }}</b> booked</span><span><b class="capacity-count">{{ slot['capacity'] }}</b> capacity</span></div>
+    </article>
+  {% else %}<p class="empty-state">No meal slots are configured yet.</p>{% endfor %}
+  </div>
+</section>
+<section class="section-block lower-grid">
+  <div class="card content-card"><div class="section-title"><div><span class="eyebrow">Your meals</span><h2>Today's bookings</h2></div></div>
+    {% for booking in bookings %}
+    <a class="booking-row" href="{{ url_for('pass_page', booking_id=booking['booking_id']) }}"><span class="booking-icon">⌑</span><span><b>{{ booking['meal']|title }}</b><small>{{ booking['start_time'] }}–{{ booking['end_time'] }} · ID #{{ booking['booking_id'] }}</small></span><span class="state-pill {{ booking['status'] }}">{{ booking['status'] }}</span></a>
+    {% else %}<p class="muted">No meals booked yet today.</p>{% endfor %}
+  </div>
+  <div class="card content-card"><div class="section-title"><div><span class="eyebrow">Live lines</span><h2>Food counters</h2></div></div>
+    {% for counter in counters %}<div class="counter-row"><span>{{ counter['name'] }}</span><strong>{{ counter['queue_length'] }} <small>in line</small></strong></div>{% else %}<p class="muted">No counters configured.</p>{% endfor %}
+    <p class="micro-copy">Estimated wait averages the counter queues at 2 minutes per student.</p>
+  </div>
+</section>
+{% endblock %}

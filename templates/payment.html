@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Payment · Smart Mess Flow{% endblock %}
+{% block content %}
+<section class="narrow-page">
+  <div class="page-heading"><span class="eyebrow">Day scholar payment</span><h1>Meal access</h1><p>This demo payment unlocks meal-slot booking for your account.</p></div>
+  <div class="card payment-card">
+    <div class="payment-symbol">₹</div><h2>{{ 'Payment complete' if student['paid'] else 'Mess meal access' }}</h2>
+    <p class="muted">{{ 'Your account is ready to book meal slots.' if student['paid'] else 'This is a simulated payment. No money will be collected.' }}</p>
+    {% if student['paid'] %}<span class="success-badge">✓ Paid</span><a href="{{ url_for('book') }}" class="button primary full">Book a slot</a>
+    {% else %}<form method="post"><button class="button primary full" type="submit">Pay Now</button></form>{% endif %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Admin panel · Smart Mess Flow{% endblock %}
+{% block content %}
+<section class="page-heading"><span class="eyebrow">System controls</span><h1>Admin panel</h1><p>Manage slot capacity, food counters, and mess bookings.</p></section>
+<section class="admin-grid">
+  <div class="card admin-card"><div class="section-title"><div><span class="eyebrow">Scheduling</span><h2>Add a slot</h2></div></div>
+    <form method="post" class="admin-form">
+      <input type="hidden" name="action" value="save_slot">
+      <label for="meal">Meal</label><select id="meal" name="meal" required><option value="breakfast">Breakfast</option><option value="lunch">Lunch</option><option value="dinner">Dinner</option></select>
+      <div class="form-grid"><div><label for="start_time">Start</label><input id="start_time" name="start_time" type="time" required></div><div><label for="end_time">End</label><input id="end_time" name="end_time" type="time" required></div></div>
+      <label for="capacity">Capacity</label><input id="capacity" name="capacity" type="number" min="1" value="50" required>
+      <button class="button primary" type="submit">Add slot</button>
+    </form>
+  </div>
+  <div class="card admin-card"><div class="section-title"><div><span class="eyebrow">Service lanes</span><h2>Food counters</h2></div></div>
+    {% for counter in counters %}<div class="counter-row"><span>{{ counter['name'] }}</span><strong>{{ counter['queue_length'] }} <small>in line</small></strong></div>{% else %}<p class="muted">No counters yet.</p>{% endfor %}
+    <form method="post" class="inline-form"><input type="hidden" name="action" value="add_counter"><input name="name" aria-label="Counter name" placeholder="New counter name" required><button class="button secondary" type="submit">Add counter</button></form>
+  </div>
+</section>
+<section class="section-block">
+  <div class="section-title"><div><span class="eyebrow">Capacity planning</span><h2>Edit meal slots</h2></div></div>
+  <div class="table-wrap card"><table><thead><tr><th>Meal</th><th>Start</th><th>End</th><th>Booked</th><th>Capacity</th><th>Save</th></tr></thead><tbody>
+  {% for slot in slots %}<tr><form method="post"><input type="hidden" name="action" value="save_slot"><input type="hidden" name="slot_id" value="{{ slot['slot_id'] }}"><td><select name="meal"><option value="breakfast" {% if slot['meal']=='breakfast' %}selected{% endif %}>Breakfast</option><option value="lunch" {% if slot['meal']=='lunch' %}selected{% endif %}>Lunch</option><option value="dinner" {% if slot['meal']=='dinner' %}selected{% endif %}>Dinner</option></select></td><td><input type="time" name="start_time" value="{{ slot['start_time'] }}" required></td><td><input type="time" name="end_time" value="{{ slot['end_time'] }}" required></td><td>{{ slot['booked'] }}</td><td><input type="number" min="1" name="capacity" value="{{ slot['capacity'] }}" required></td><td><button class="button small secondary" type="submit">Save</button></td></form></tr>{% endfor %}
+  </tbody></table></div>
+</section>
+<section class="section-block">
+  <div class="section-title"><div><span class="eyebrow">Audit trail</span><h2>All bookings</h2></div><span class="muted">{{ bookings|length }} total</span></div>
+  <div class="table-wrap card"><table><thead><tr><th>ID</th><th>Student</th><th>Meal</th><th>Time</th><th>Status</th><th>Created</th></tr></thead><tbody>
+  {% for booking in bookings %}<tr><td>#{{ booking['booking_id'] }}</td><td>{{ booking['student_name'] }}<small class="table-sub">{{ booking['student_id'] }}</small></td><td>{{ booking['meal']|title }}</td><td>{{ booking['start_time'] }}–{{ booking['end_time'] }}</td><td><span class="state-pill {{ booking['status'] }}">{{ booking['status'] }}</span></td><td>{{ booking['created_at'] }}</td></tr>{% else %}<tr><td colspan="6" class="empty-cell">No bookings yet.</td></tr>{% endfor %}
+  </tbody></table></div>
+</section>
+{% endblock %}
