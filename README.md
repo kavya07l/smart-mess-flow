@@ -57,13 +57,14 @@ sample app. Do not reuse these passwords or enter real student information.
 4. Click **Deploy**. Once the deployment finishes, open the `vercel.app` URL
    Vercel provides and share it with your teacher.
 
-The `api/index.py` function serves the Flask app, and `vercel.json` routes
-website requests to it. The database is placed in `/tmp`, Vercel's writable
-temporary directory. Serverless temporary files are not durable and may be
-isolated between function instances, so bookings or registrations can disappear
-or differ between visits. This setup is suitable for a short demo, not real
-student records. Use a persistent hosted database for a production deployment.
-The simulated payment is not a real payment service.
+The `api/index.py` function serves the Flask app. `vercel.json` routes website
+requests to it and includes the templates and static assets in the function
+bundle. The database is placed in `/tmp`, Vercel's writable temporary directory.
+Serverless temporary files are not durable and may be isolated between function
+instances, so bookings or registrations can disappear or differ between
+visits. This setup is suitable for a short demo, not real student records. Use
+a persistent hosted database for a production deployment. The simulated
+payment is not a real payment service.
 
 ## How it works
 
