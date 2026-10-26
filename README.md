@@ -59,7 +59,8 @@ sample app. Do not reuse these passwords or enter real student information.
 
 The `api/index.py` function serves the Flask app. `vercel.json` routes website
 requests to it and includes the templates and static assets in the function
-bundle. The database is placed in `/tmp`, Vercel's writable temporary directory.
+bundle. The app also selects `/tmp`, Vercel's writable temporary directory,
+when Vercel imports the root `app.py` directly.
 Serverless temporary files are not durable and may be isolated between function
 instances, so bookings or registrations can disappear or differ between
 visits. This setup is suitable for a short demo, not real student records. Use

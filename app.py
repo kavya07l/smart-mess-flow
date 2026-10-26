@@ -7,6 +7,7 @@ from io import BytesIO
 import os
 import secrets
 import sqlite3
+import tempfile
 
 import qrcode
 from flask import (
@@ -21,6 +22,14 @@ from flask import (
     url_for,
 )
 from werkzeug.security import check_password_hash, generate_password_hash
+
+# Vercel may import this root module directly as a Python function, bypassing
+# api/index.py. Use its writable temporary directory before database.py loads.
+if os.environ.get("VERCEL") == "1":
+    os.environ.setdefault(
+        "MESS_DATABASE",
+        os.path.join(tempfile.gettempdir(), "smart-mess-flow.db"),
+    )
 
 from database import get_db, init_db
 
